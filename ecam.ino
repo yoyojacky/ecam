@@ -25,8 +25,8 @@
 #include "esp_http_server.h"
 
 //Replace with your network credentials
-const char* ssid = "TP-208";
-const char* password = "stm32f429";
+const char* ssid = "路由的ssid";
+const char* password = "路由的密码";
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 
