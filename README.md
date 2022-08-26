@@ -10,3 +10,5 @@ arduino-cli compile -b esp32:esp32:esp32cam -p /dev/ttyUSB0 --upload
 * press reset button on the module and waiting for it Connecting to wifi
 * Open a browser to access the link which printed on monitor.
 
+## ESP-NOW
+* Just a testing code.
