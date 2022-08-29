@@ -3,8 +3,9 @@
 
 // Define a data structure
 typedef struct struct_message {
-	int b;
-	float c;
+	int throttle_value;
+	int steering_value;
+	bool turn_on_light;
 } struct_message;
 
 
@@ -14,12 +15,12 @@ struct_message myData;
 // callback function executed when data is received.
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
 	memcpy(&myData, incomingData, sizeof(myData));
-	Serial.print("Data received: ");
-	Serial.println(len);
-	Serial.print("Integer Value: ");
-	Serial.println(myData.b);
-	Serial.print("Float Value: ");
-	Serial.println(myData.c);
+	Serial.print("Data received:\t");
+	Serial.print(len);
+	Serial.print("\tThrottle Value:\t");
+	Serial.print(myData.throttle_value);
+	Serial.print("\tSteering Value:\t");
+	Serial.println(myData.steering_value);
 	Serial.println();
 }
 
