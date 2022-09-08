@@ -8,12 +8,13 @@
 // Variables for test data
 #define SDA 4
 #define SCL 5
+
 // 油门 
-int throttle_pin = 5;
+int throttle_pin = 0;
 // 转向
 int steering_pin = 7;
 // 车灯
-bool turn_on_light = false;
+int light = 2;
 // for OLED
 char wheels_buffer[100];
 char throttle_buffer[100];
@@ -26,7 +27,7 @@ uint8_t broadcastAddress[] = {0x84, 0xF7, 0x03, 0xA9, 0x4C, 0x98};
 typedef struct struct_message {
 	int throttle_value;
 	int steering_value;
-	bool turn_on_light;
+	int light;
 
 } struct_message;
 
@@ -48,6 +49,9 @@ SSD1306Wire display(0x3c, SDA, SCL);
 void setup() {
 	Serial.begin(115200);
 	pinMode(steering_pin, INPUT);
+	pinMode(throttle_pin, INPUT);
+	pinMode(light, OUTPUT);
+
 
 	WiFi.mode(WIFI_STA);
 	
@@ -83,17 +87,18 @@ void loop() {
 	Serial.println(throttle_value);
 	myData.steering_value = wheels_value;
 	myData.throttle_value = throttle_value;
-	myData.turn_on_light= false;
+	myData.light= digitalRead(light);
 
 	itoa(wheels_value, wheels_buffer, 10);
 	display.drawString(0, 0, "Steering: ");
-	display.drawString(40, 0, wheels_buffer);
+	display.drawString(48, 0, wheels_buffer);
 
 	itoa(throttle_value, throttle_buffer, 10);
 	display.drawString(0, 16, "throttle: ");
-	display.drawString(40, 16, throttle_buffer);
+	display.drawString(48, 16, throttle_buffer);
 	display.display();
-
+	delay(20);
+	display.clear();
 
 
 	esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
