@@ -13,6 +13,12 @@ typedef struct struct_message {
 // Create a structure object
 struct_message myData;
 
+// servo attached pin
+const int servo_pin = 9;    // pwm attached pin
+const int freq = 5000;     // pwm freq
+const int pwm_channel = 0;  // singal generator pin
+const int resolution = 16; // 16 bit resolution
+
 // define oled pin 
 #define SDA 4 
 #define SCL 5 
@@ -47,6 +53,11 @@ void setup() {
 	if (esp_now_init() != ESP_OK) {
 	  Serial.println("Error initializing ESP-NOW");
 	  return;
+
+	  // pwm configuration.
+	 ledcSetup(pwm_channel, freq, resolution);
+	 // binding the singal to pin
+	 ledcAttachPin(servo_pin, pwm_channel);
 	}
 
 	// register receive call back function
@@ -60,6 +71,11 @@ void setup() {
 
 
 void loop() {
+	// drive servo 
+	int raw_input = myData.steering_value;
+	int output = map(raw_input, 0, 4096, 0, 180);
+
+	ledcWrite(servo_pin, output);
 
 	// convert data type
 	itoa(myData.throttle_value, th_buffer, 10);
